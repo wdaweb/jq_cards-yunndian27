@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>翻牌小遊戲｜作業</title>
+    <!-- css -->
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body>
+    <!-- 版面 -->
+    <div id="wrapper">
+        <div class="bestscore">
+            <div class="ribbon">
+                BEST &emsp;<span class="highscore"> 0 </span>&emsp; SCORE
+            </div>
+        </div>
+        <!-- 遊戲區 -->
+        <div class="container">
+            <div class="heading">
+                <h1>翻牌記憶遊戲</h1>
+            </div>
+            <!-- 計分 -->
+            <div class="record">
+                <div class="rec">
+                    <h3>分數: <span class="score">0</span> </h3>
+                </div>
+                <div class="rec">
+                    <div class="info">
+                        <input type="button" value="開始遊戲" id="start">
+                    </div>
+
+                </div>
+                <div class="rec">
+                    <h3>學習時間： <span id="time">0</span> 秒</h3>
+                    <!-- <h3>翻牌: <span class="nums">0</span></h3> -->
+                </div>
+            </div>
+            <!-- 翻牌 -->
+            <div class="game">
+                <div id="game-animal"></div>
+                <div id="show">
+                    <!-- <img src="./images/animal1.jpg">
+                    <div class="pic-letter">
+                        <h3>Aa <span>/ æ /</span></h3>
+                        <button id="play-a">
+                            <i class="far fa-play-circle"></i>
+                        </button>
+                        <audio id="audio-a" src="./sound/a.mp3"></audio>
+                    </div>
+                    <div class="pic-name">
+                        <h3>alligator <span>鱷魚</span></h3>
+                        <button id="play">
+                            <i class="far fa-play-circle"></i>
+                        </button>
+                        <audio id="audio" src="./sound/alligator.mp3"></audio>
+                    </div> -->
+                </div>
+                <div id="game-letter"></div>
+
+            </div>
+
+        </div>
+        <!-- 訊息 -->
+        <!-- <div class="mask">
+            <div id="title">
+                <h2>翻牌遊戲說明</h2>
+            </div>
+            <div class="rule">
+                1. 英文單字翻牌遊戲<br />
+                2.
+            </div>
+        </div> -->
+    </div>
+
+
+    <!-- jq -->
+    <script src="./jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        const data = [
+            { numbers: '1', animal: 'alligator', letter: 'Aa', phonics: '/ æ /', trans: '鱷魚', soundLetter: './sound/a.mp3', soundAnimal: './sound/alligator.mp3' },
+            { numbers: '2', animal: 'bear', letter: 'Bb', phonics: '/ b /', trans: '熊', soundLetter: './sound/b.mp3', soundAnimal: './sound/bear.mp3' },
+            { numbers: '3', animal: 'cat', letter: 'Cc', phonics: '/ k /', trans: '貓', soundLetter: './sound/c.mp3', soundAnimal: './sound/cat.mp3' },
+            { numbers: '4', animal: 'duck', letter: 'Dd', phonics: '/ d /', trans: '鴨子', soundLetter: './sound/d.mp3', soundAnimal: './sound/duck.mp3' },
+            { numbers: '5', animal: 'elephant', letter: 'Ee', phonics: '/ ɛ /', trans: '大象', soundLetter: './sound/e.mp3', soundAnimal: './sound/elephant.mp3' },
+            { numbers: '6', animal: 'frog', letter: 'Ff', phonics: '/ f /', trans: '青蛙', soundLetter: './sound/f.mp3', soundAnimal: './sound/frog.mp3' },
+            { numbers: '7', animal: 'giraffe', letter: 'Gg', phonics: '/ g /', trans: '長頸鹿', soundLetter: './sound/g.mp3', soundAnimal: './sound/giraffe.mp3' },
+            { numbers: '8', animal: 'hippopotamus', letter: 'Hh', phonics: '/ h /', trans: '河馬', soundLetter: './sound/h.mp3', soundAnimal: './sound/hippopotamus.mp3' },
+            { numbers: '9', animal: 'iguana', letter: 'Ii', phonics: '/ ɪ /', trans: '鬣蜥', soundLetter: './sound/i.mp3', soundAnimal: './sound/iguana.mp3' },
+            { numbers: '10', animal: 'jellyfish', letter: 'Jj', phonics: '/ dʒ /', trans: '水母', soundLetter: './sound/j.mp3', soundAnimal: './sound/jellyfish.mp3' },
+            { numbers: '11', animal: 'koala', letter: 'Kk', phonics: '/ k /', trans: '無尾熊', soundLetter: './sound/k.mp3', soundAnimal: './sound/koala.mp3' },
+            { numbers: '12', animal: 'lion', letter: 'Ll', phonics: '/ l /', trans: '獅子', soundLetter: './sound/l.mp3', soundAnimal: './sound/lion.mp3' },
+            { numbers: '13', animal: 'monkey', letter: 'Mm', phonics: '/ m /', trans: '猴子', soundLetter: './sound/m.mp3', soundAnimal: './sound/monkey.mp3' },
+            { numbers: '14', animal: 'narwhal', letter: 'Nn', phonics: '/ n /', trans: '獨角鯨', soundLetter: './sound/n.mp3', soundAnimal: './sound/narwhal.mp3' },
+            { numbers: '15', animal: 'octopus', letter: 'Oo', phonics: '/ a /', trans: '章魚', soundLetter: './sound/o.mp3', soundAnimal: './sound/octopus.mp3' },
+            { numbers: '16', animal: 'pig', letter: 'Pp', phonics: '/ p /', trans: '豬', soundLetter: './sound/p.mp3', soundAnimal: './sound/pig.mp3' },
+            { numbers: '17', animal: 'quetzal', letter: 'Qq', phonics: '/ kw /', trans: '克沙爾鳥', soundLetter: './sound/q.mp3', soundAnimal: './sound/quetzal.mp3' },
+            { numbers: '18', animal: 'rabbit', letter: 'Rr', phonics: '/ r /', trans: '兔子', soundLetter: './sound/r.mp3', soundAnimal: './sound/rabbit.mp3' },
+            { numbers: '19', animal: 'snake', letter: 'Ss', phonics: '/ s /', trans: '蛇', soundLetter: './sound/s.mp3', soundAnimal: './sound/snake.mp3' },
+            { numbers: '20', animal: 'tiger', letter: 'Tt', phonics: '/ t /', trans: '老虎', soundLetter: './sound/t.mp3', soundAnimal: './sound/tiger.mp3' },
+            { numbers: '21', animal: 'unicorn', letter: 'Uu', phonics: '/ ʌ /', trans: '獨角獸', soundLetter: './sound/u.mp3', soundAnimal: './sound/unicorn.mp3' },
+            { numbers: '22', animal: 'vampire bat', letter: 'Vv', phonics: '/ v /', trans: '吸血蝙蝠', soundLetter: './sound/v.mp3', soundAnimal: './sound/vampire.mp3' },
+            { numbers: '23', animal: 'whale', letter: 'Ww', phonics: '/ w /', trans: '鯨魚', soundLetter: './sound/w.mp3', soundAnimal: './sound/whale.mp3' },
+            { numbers: '24', animal: 'x-ray fish', letter: 'Xx', phonics: '/ ks /', trans: 'X射線魚', soundLetter: './sound/x.mp3', soundAnimal: './sound/x-rayfish.mp3' },
+            { numbers: '25', animal: 'yak', letter: 'Yy', phonics: '/ j /', trans: '犛牛', soundLetter: './sound/y.mp3', soundAnimal: './sound/yak.mp3' },
+            { numbers: '26', animal: 'zebra', letter: 'Zz', phonics: '/ z /', trans: '斑馬', soundLetter: './sound/z.mp3', soundAnimal: './sound/zebra.mp3' },
+        ]
+
+        // let game = false
+        let time = 0
+        let timer = 0
+
+        // $('#play-a').on("click", function () {
+        //     let audioAlphabet = $("#audio-a")[0]
+        //     audioAlphabet.play()
+
+        // })
+
+        // $('#play').on("click", function () {
+        //     let audioLetter = $("#audio")[0]
+        //     audioLetter.play()
+
+        // })
+
+
+
+        const playgame = () => {
+
+            const arr = []
+
+            for (let i = 0; i < 9; i++) {
+                const rand = Math.floor(Math.random() * data.length)
+
+                if (arr.includes(data[rand])) {
+                    i--
+                } else {
+                    arr.push(data[rand])
+                }
+            }
+
+            // 產生 9 張卡片
+            for (let i = 0; i < arr.length; i++) {
+                $('#game-animal').append(`
+                <div class="card">
+                    <div class="card-front"></div>
+                    <div class="card-back"></div>
+                </div>
+            `)
+
+                $('#game-letter').append(`
+                <div class="card">
+                    <div class="card-front"></div>
+                    <div class="card-back"></div>
+                </div>
+            `)
+            }
+
+            // 產生 中間內容
+            for (let i = 0; i < 9; i++) {
+                $('#show').append(`
+                    <img>
+                    <div class="pic-letter">
+                        <h3></h3>
+                    </div>
+                    <div class="pic-name">
+                        <h3></h3>                        
+                    </div>
+                    `)
+            }
+
+            // 中間 卡牌內容
+            for (let i = 0; i < 9; i++) {
+                $('#show img').eq(i).attr('src', `images/animal${arr[i].numbers}.jpg`)
+
+                $('#show .pic-letter').eq(i).find('h3').html(`${arr[i].letter} <span>${arr[i].phonics}</span>`)
+
+                // $('#show .pic-letter').eq(i).find('#audio-a').src(`./sound/${arr[i].letter}.mp3`)
+
+                $('#show .pic-name').eq(i).find('h3').html(`${arr[i].animal} <span>${arr[i].trans}</span>`)
+
+                $('#show img').eq(i).attr('data-img', arr[i].numbers)
+            }
+
+            // 花色 打散
+            for (let i = 0; i < 9; i++) {
+                // let num = i % (9 / 2) + 1
+                $('#game-animal .card').eq(i).find('.card-front').css('background-image', `url(./images/animal${arr[i].numbers}.jpg) `)
+
+                $('#game-letter .card').eq(i).find('.card-front').css('background-image', `url(./images/letter${arr[i].numbers}.jpg) `)
+
+                $('#game-animal .card').eq(i).attr('data-card', arr[i].numbers)
+                $('#game-letter .card').eq(i).attr('data-card', arr[i].numbers)
+
+                let target = Math.floor(Math.random() * data.length)
+                $('#game-animal .card').eq(target).insertAfter($('#game-animal .card').eq(i))
+                target = Math.floor(Math.random() * 9)
+                $('#game-letter .card').eq(target).insertAfter($('#game-letter .card').eq(i))
+            }
+
+            const timer = setInterval(() => {
+                time += 1
+                $('#time').text(Math.round(time * 10) / 10)
+            }, 1000)
+        }
+
+        // 發音按鈕
+        // $('#play-a').on("click", function () {
+        //     let audioAlphabet = $("#audio-a")[0]
+        //     audioAlphabet.play()
+        // })
+
+        // $('#play').on("click", function () {
+        //     let audioLetter = $("#audio")[0]
+        //     audioLetter.play()
+        // })
+
+
+        // 打開卡片
+        $('#game-animal, #game-letter').on('click', '.card', function () {
+            // if (!gmae) return
+
+            if (!$(this).hasClass('card-open')) {
+                if ($('.card-open').length === 1 && $(this).parent().attr('id') !== $('.card-open').eq(0).parent().attr('id')) {
+                    $(this).addClass('card-open')
+                } else if ($('.card-open').length === 0) {
+                    $(this).addClass('card-open')
+                }
+            }
+
+            if ($('.card-open').length === 2) {
+                if ($('.card-open').eq(0).attr('data-card') === $('.card-open').eq(1).attr('data-card')) {
+                    $('.card-open').fadeTo(1000, 0).addClass('card-clear')
+                    // $('#show').css('display', 'flex')
+                }
+
+                setTimeout(() => {
+                    $('.card-open').removeClass(`card-open`)
+                }, 1000);
+            }
+
+            if ($('.card-clear').length === data.length * 2) {
+                clearInterval(timer)
+                Swal.fire({
+                    title: '恭喜過關'
+                })
+                $('#start').attr('disabled', false)
+            }
+        })
+
+        $('#start').click(function () {
+            // game = true
+            // $('#show').css('display', 'none')
+            $(this).attr('disabled', true)
+            playgame()
+        })
+
+
+    </script>
+</body>
+
+</html>
