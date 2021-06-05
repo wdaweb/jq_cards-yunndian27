@@ -10,6 +10,7 @@ html,
 body {
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 }
 
 #wrapper {
@@ -23,8 +24,8 @@ body {
   /* overflow: hidden; */
 }
 
-/* bestscore----------------------------- */
-.bestscore{ 
+/* gameName----------------------------- */
+.gameName{ 
   width: 65%;
   height: 15%;
   display: flex;
@@ -68,6 +69,11 @@ body {
   border-right-color: transparent;
 }
 
+.ribbon h1 {
+  font-size: 2.2rem;
+  letter-spacing: 3px;
+}
+
 /* container----------------------------- */
 .container {
   width: 85%;
@@ -77,66 +83,118 @@ body {
   border-radius: 30px;
   box-shadow: 0 0 15px #C1F1FA;
 
-  display: flex;
-  flex-direction: column;
-}
-
-/* heading----------------------------- */
-.heading {
-  width: 100%;
-  height: 20%;
-  /* border: 1px solid #000; */
+  /* display: flex;
+  flex-direction: column; */
   position: relative;
 }
 
-.heading h1 {
-  font-size: 2.4rem;
+/* record ------------------------*/
+.record {
+  width: 100%;
+  height: 5%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  /* border: 3px solid #EB5AC3; */
+  top: 7%;
+  left: 0;
+  /* flex-grow: 1; */
 }
+
+.rec{
+  width: 30%;
+  display: flex;
+  justify-content: center;
+  /* border: 1px solid #333; */
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: 300;
+  letter-spacing: 3px;
+}
+
+.record input {
+  font-size: 1.2rem;
+  padding: 5px 30px;
+  /* background: #D10097; */
+  /* color: #fff; */
+  border: none;
+  border-radius: 20px;
+}
+
+/* game ----------------------------- */
 
 .game{
   width: 100%;
   height: 80%;
   /* border: 1px solid #000; */
-  display: flex;
+  
+  /* display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
   flex-wrap: wrap;
   margin: auto;
-  position: relative;
+  position: relative; */
+
+  display: inline-block;
+  position: absolute;
+  top: 21%;
 }
 
 #game-animal, #game-letter {
   width: 30%;
   height: 85%;
-  display: flex;
+  /* display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
-  align-items: center;
+  align-items: center; */
+  /* border: 1px solid #333; */
+}
+
+#game-animal{
+  position: absolute;
+  left: 5%;
+}
+
+#game-letter{
+  position: absolute;
+  right: 5%;
 }
 
 /* show------------------------ */
 #show {
   width: 25%;
   height: 85%;
-  /* border: 1px solid #888; */
+
+  display: none;
+  margin: 0 auto;
+  margin: 0 5px;
+
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  overflow: hidden;
+}
+#show .desc {
+  width: 95%;
+  height: 100%;
+  margin: 0 auto;
 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  margin: 0 5px;
 }
 #show .pic-letter, #show .pic-name {
   display: flex;
   flex-direction: row;
   align-items: baseline;
-  /* padding-left: 10px; */
+  margin-bottom: 5px;
 }
 #show h3 {
   font-size: 1.5rem;
@@ -149,20 +207,23 @@ body {
   font-weight: 300;
 }
 
-#show i {
-  font-size: 1.2rem;
-  color: #D10097;
+#show .desc .englishPic{
+  width: 100%;
+  height: auto;
+  margin-bottom: 5px;
 }
 
-#show img{
-  width: 90%;
+#show .englishPic img{
+  width: 100%;
 }
 
-#show button {
-  background-color: #fff;
-  border: none;
-  margin-left: 7px;
+.ani-fadein{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
 }
+
 /* card-------------------- */
 .card {
   width: 27%;
@@ -172,11 +233,11 @@ body {
   /* background: #000; */
   border-radius: 10px;
 
-  /* position: relative; */
+  position: relative;
   transform-style: preserve-3d;
   transition: transform 0.5s;
-  /* float: left; */
-  margin: 10px 10px;
+  float: left;
+  margin: 12px;
 }
 
 .card-front {
@@ -186,10 +247,19 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
+
   position: absolute;
   transform: rotateY(180deg);
   box-shadow: 2px 2px 5px #ccc;
   border-radius: 10px;
+}
+
+#game-animal .card-front{
+  background-color: #fbf07f;
+}
+
+#game-letter .card-front{
+  background-color: #d1c7f2;
 }
 
 .card-back {
@@ -199,8 +269,11 @@ body {
   background-position: center;
   background-repeat: repeat;
   background-size: contain;
+
+  /* position: absolute; */
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+
   box-shadow: 2px 2px 5px #ccc;
   border-radius: 10px;
   background-color: #90e0ef;
@@ -210,37 +283,7 @@ body {
   transform: rotateY(180deg);
 }
 
-/* record ------------------------*/
-.record {
-  width: 100%;
-  height: 5%;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  position: relative;
-  flex-grow: 1;
-}
 
-.rec{
-  width: 20%;
-  display: flex;
-  justify-content: center;
-}
-
-h3 {
-  font-size: 1.5rem;
-  font-weight: 300;
-  letter-spacing: 3px;
-}
-
-.record input {
-  font-size: 1.2rem;
-  padding: 3px 15px;
-  background: #D10097;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-}
 /* mask */
 
 .mask {
