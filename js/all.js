@@ -181,22 +181,28 @@ const enWordInfo = [
         phonics: '/ z /',
         trans: '斑馬',
     },
-]
+];
 
-let time = 0
-let timer = 0
+let time = 0;
+let runTime = 0;
 
 const playgame = () => {
+    $('.card-clear').removeClass('card-clear')
+    $('#game-animal').empty()
+    $('#game-letter').empty()
+    $('#show').empty()
+    time = 0;
+    $('#timeup').text(Math.round(time * 10) / 10)
 
-    const arr = []
+    const arr = [];
 
     for (let i = 0; i < 9; i++) {
-        const rand = Math.floor(Math.random() * enWordInfo.length)
+        const rand = Math.floor(Math.random() * enWordInfo.length);
 
         if (arr.includes(enWordInfo[rand])) {
-            i--
+            i--;
         } else {
-            arr.push(enWordInfo[rand])
+            arr.push(enWordInfo[rand]);
         }
     }
 
@@ -207,73 +213,77 @@ const playgame = () => {
             <div class="card-front"></div>
             <div class="card-back"></div>
         </div>
-    `)
+    `);
 
         $('#game-letter').append(`
         <div class="card">
             <div class="card-front"></div>
             <div class="card-back"></div>
         </div>
-    `)
+    `);
     }
 
     // 花色 打散
     for (let i = 0; i < 9; i++) {
-        // let num = i % (9 / 2) + 1
-        $('#game-animal .card').eq(i).find('.card-front').css('background-image', `url(../images/animal${arr[i].numbers}.jpg) `)
+        $('#game-animal .card').eq(i).find('.card-front').css('background-image', `url(../images/animal${arr[i].numbers}.jpg) `);
 
-        $('#game-letter .card').eq(i).find('.card-front').css('background-image', `url(../images/letter${arr[i].numbers}.jpg) `)
+        $('#game-letter .card').eq(i).find('.card-front').css('background-image', `url(../images/letter${arr[i].numbers}.jpg) `);
 
-        $('#game-animal .card').eq(i).attr('data-card', arr[i].numbers)
-        $('#game-letter .card').eq(i).attr('data-card', arr[i].numbers)
+        $('#game-animal .card').eq(i).attr('data-card', arr[i].numbers);
+        $('#game-letter .card').eq(i).attr('data-card', arr[i].numbers);
 
-        let target = Math.floor(Math.random() * enWordInfo.length)
-        $('#game-animal .card').eq(target).insertAfter($('#game-animal .card').eq(i))
-        target = Math.floor(Math.random() * 9)
-        $('#game-letter .card').eq(target).insertAfter($('#game-letter .card').eq(i))
+        let target = Math.floor(Math.random() * enWordInfo.length);
+        $('#game-animal .card').eq(target).insertAfter($('#game-animal .card').eq(i));
+        target = Math.floor(Math.random() * 9);
+        $('#game-letter .card').eq(target).insertAfter($('#game-letter .card').eq(i));
     }
 
-    timer = setInterval(() => {
-        time += 1
-        $('#time').text(Math.round(time * 10) / 10)
-    }, 1000)
-}
+    runTime = setInterval(() => {
+        time += 1;
+        $('#timeup').text(Math.round(time * 10) / 10);
+    }, 1000);
+};
 
 // 打開卡片
 $('#game-animal, #game-letter').on('click', '.card', function () {
+    if (!game) return
 
     if (!$(this).hasClass('card-open')) {
         if ($('.card-open').length === 1 && $(this).parent().attr('id') !== $('.card-open').eq(0).parent().attr('id')) {
-            $(this).addClass('card-open')
+            $(this).addClass('card-open');
         } else if ($('.card-open').length === 0) {
-            $(this).addClass('card-open')
+            $(this).addClass('card-open');
         }
     }
 
     if ($('.card-open').length === 2) {
         if ($('.card-open').eq(0).attr('data-card') === $('.card-open').eq(1).attr('data-card')) {
-            $('.card-open').fadeTo(1000, 0).addClass('card-clear')
+            $('.card-open').fadeTo(1000, 0).addClass('card-clear');
             setTimeout(() => {
-                findEnglish()
-                intro()
-            }, 1000)
-            addCard()
+                findEnglish();
+                intro();
+            }, 1000);
+            addCard();
         }
 
         setTimeout(() => {
-            $('.card-open').removeClass(`card-open`)
-        }, 1000)
+            $('.card-open').removeClass('card-open');
+        }, 1000);
     }
 
-    if ($('.card-clear').length === enWordInfo.length * 2) {
-        clearInterval(timer)
+    if ($('.card-clear').length === 18) {
+        clearInterval(runTime);
         Swal.fire({
-            title: '恭喜過關'
-        })
+            title: '恭喜過關',
+            text: '再玩一次可以學到不同的單字喔！',
+        });
         // alert('恭喜過關')
-        $('#start').attr('disabled', false)
+        $('#start').attr('disabled', false);
+        $('#start').css('background-color', '#e500a4')
+        $('#show').empty();
+        $('.container .goodPic').css('display', 'block');
     }
-})
+});
 
 // 出現卡片
 const addCard = () => {
@@ -289,31 +299,35 @@ const addCard = () => {
                     <h3></h3><span></span>                        
                 </div>
             </div>
-            `)
-}
+            `);
+};
 
 // 中間內容介紹
 const intro = () => {
-    $('#show').css('display', 'block')
-    $('#show').addClass('ani-fadein')
-}
+    $('#show').css('display', 'block');
+    $('#show').addClass('ani-fadein');
+};
 
 // 攤牌內容
-function findEnglish() {
-    let englishId = $('.card-open').eq(0).attr('data-card') - 1
+const findEnglish = () => {
+    let englishId = $('.card-open').eq(0).attr('data-card') - 1;
 
-    $('.englishPic img').attr('src', `images/animal${enWordInfo[englishId].numbers}.jpg`)
+    $('.englishPic img').attr('src', `images/animal${enWordInfo[englishId].numbers}.jpg`);
 
-    $('#show .pic-letter h3').text(`${enWordInfo[englishId].letter}`)
-    $('#show .pic-letter span').text(`${enWordInfo[englishId].phonics}`)
+    $('#show .pic-letter h3').text(`${enWordInfo[englishId].letter}`);
+    $('#show .pic-letter span').text(`${enWordInfo[englishId].phonics}`);
 
-    $('#show .pic-name h3').text(`${enWordInfo[englishId].animal}`)
-    $('#show .pic-name span').text(`${enWordInfo[englishId].trans}`)
-}
+    $('#show .pic-name h3').text(`${enWordInfo[englishId].animal}`);
+    $('#show .pic-name span').text(`${enWordInfo[englishId].trans}`);
+};
 
 
 $('#start').click(function () {
-    $(this).attr('disabled', true)
-    // timer = 0
-    playgame()
-})
+    game = true;
+    $(this).attr('disabled', true);
+    $(this).css('background-color', '#ccc');
+    $('.mask').css('display', 'none');
+    $('.rec').css('display', 'block');
+    $('.container .goodPic').css('display', 'none');
+    playgame();
+});
